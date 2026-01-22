@@ -1,0 +1,88 @@
+/* ===== TOPBAR ROOT ===== */
+.topbar {
+  height: 64px;
+  background: #ffffff;
+  display: grid;
+  grid-template-columns: 160px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+/* ===== BRAND ===== */
+.topbar-brand {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ff6b6b;
+}
+
+/* ===== SEARCH ===== */
+.topbar-search {
+  max-width: 520px;
+  width: 100%;
+}
+
+/* đảm bảo Input không bị co */
+.topbar-search input {
+  width: 100%;
+}
+
+/* ===== RIGHT ===== */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* icon button */
+.topbar-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.topbar-icon-btn svg {
+  width: 18px;
+  height: 18px;
+
+  stroke: #374151 !important;
+  stroke-width: 2 !important;
+  fill: none !important;
+  color: #374151 !important;
+}
+
+.topbar-icon-btn:hover svg {
+  stroke: #111827 !important;
+}
+
+.topbar-icon-btn:hover svg {
+  stroke: #111827;    
+}
+
+
+/* ===== DATE BOX ===== */
+.date-box {
+  margin-left: 8px;
+  text-align: right;
+  line-height: 1.2;
+}
+
+.weekday {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.date {
+  font-size: 12px;
+  color: #6b7280;
+}
