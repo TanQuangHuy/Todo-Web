@@ -5,6 +5,9 @@ import MyTaskPage from "../pages/app/MyTaskPage";
 import RequireAuth from "./RequireAuth";
 import AppLayout from "../components/layout/AppLayout";
 
+import AccountInfoPage from "../pages/setting/AccountInfoPage";
+import ChangePasswordPage from "../pages/setting/ChangePasswordPage";
+
 import RegisterPage from "../pages/auth/RegisterPage";
 
 export default function AppRouter() {
@@ -21,6 +24,8 @@ export default function AppRouter() {
       >
         {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
         <Route path="/tasks" element={<MyTaskPage />} />
+        <Route path="/settings/account" element={<AccountInfoPage />} />
+        <Route path="/settings/change-password" element={<ChangePasswordPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/tasks" />} />

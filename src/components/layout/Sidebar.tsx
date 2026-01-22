@@ -60,7 +60,7 @@ export default function Sidebar() {
           Task Categories
         </NavLink>
 
-        <NavLink to="/app/dashboard" style={navItem}>
+        <NavLink to="/settings/account" style={navItem}>
           <Settings size={18} />
           Settings
         </NavLink>
