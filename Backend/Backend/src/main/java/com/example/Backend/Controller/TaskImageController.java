@@ -1,6 +1,6 @@
 package com.example.Backend.Controller;
 
-import com.example.Backend.DTO.TaskImageResponse;
+import com.example.Backend.DTO.TaskImage.TaskImageResponse;
 import com.example.Backend.Services.TaskImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,6 @@ public class TaskImageController {
 
     private final TaskImageService taskImageService;
 
-    /* Upload image */
     @PostMapping("/upload")
     public ResponseEntity<TaskImageResponse> upload(
             @RequestParam Long taskId,
@@ -39,7 +38,6 @@ public class TaskImageController {
         );
     }
 
-    /* Get images by task */
     @GetMapping("/task/{taskId}")
     public ResponseEntity<List<TaskImageResponse>> getByTask(
             @PathVariable Long taskId
@@ -47,8 +45,7 @@ public class TaskImageController {
         return ResponseEntity.ok(taskImageService.getByTask(taskId));
     }
 
-    /* Update index (reorder) */
-    /* Update 1 image */
+
     @PutMapping("/{id}/image")
     public ResponseEntity<TaskImageResponse> updateImage(
             @PathVariable Long id,
@@ -59,7 +56,6 @@ public class TaskImageController {
         );
     }
 
-    /* Replace all images of a task */
     @PutMapping("/task/{taskId}/replace-all")
     public ResponseEntity<List<TaskImageResponse>> replaceAll(
             @PathVariable Long taskId,
@@ -70,7 +66,6 @@ public class TaskImageController {
         );
     }
 
-    /* Update index */
     @PutMapping("/{id}/index")
     public ResponseEntity<TaskImageResponse> updateIndex(
             @PathVariable Long id,
@@ -81,8 +76,6 @@ public class TaskImageController {
         );
     }
 
-
-    /* Delete */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         taskImageService.delete(id);

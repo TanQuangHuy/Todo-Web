@@ -1,4 +1,4 @@
-package com.example.Backend.DTO;
+package com.example.Backend.DTO.TaskImage;
 
 import lombok.Builder;
 import lombok.Data;

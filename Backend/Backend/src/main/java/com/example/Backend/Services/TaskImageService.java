@@ -2,7 +2,7 @@ package com.example.Backend.Services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.Backend.DTO.TaskImageResponse;
+import com.example.Backend.DTO.TaskImage.TaskImageResponse;
 import com.example.Backend.Entity.Task;
 import com.example.Backend.Entity.TaskImage;
 import com.example.Backend.Repository.TaskImageRepository;

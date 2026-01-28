@@ -26,11 +26,6 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    /**
-     * =========================
-     * REGISTER
-     * =========================
-     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
@@ -41,11 +36,6 @@ public class UserController {
                 .body("Đăng ký thành công");
     }
 
-    /**
-     * =========================
-     * LOGIN
-     * =========================
-     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
@@ -67,13 +57,13 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Lấy danh sách role từ Spring Security (KHÔNG động vào entity)
+        // Lấy danh sách role từ Spring Security
         List<String> roles = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        // Lấy thông tin user (DTO, KHÔNG trả entity)
+        // Lấy thông tin user
         LoginResponse response = userService.buildLoginResponse(input, roles);
 
         return ResponseEntity.ok(response);
