@@ -60,7 +60,7 @@ public class ChatMessageService {
                 .senderId(entity.getSender().getUserId())
                 .senderName(entity.getSender().getUserName())
                 .content(entity.getContent())
-                .messageType(entity.getMessageType())
+                .messageType(entity.getMessageType().name())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }

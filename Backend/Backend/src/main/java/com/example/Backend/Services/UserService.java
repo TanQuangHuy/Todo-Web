@@ -87,6 +87,8 @@ public class UserService {
 
         User user = User.builder()
                 .phoneNumber(req.getPhoneNumber())
+                .firstName(req.getFirstName())
+                .lastName(req.getLastName())
                 .userName(req.getUserName())
                 .email(req.getEmail())
                 .address(req.getAddress())

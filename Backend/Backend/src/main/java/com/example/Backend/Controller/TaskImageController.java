@@ -17,6 +17,7 @@ public class TaskImageController {
 
     private final TaskImageService taskImageService;
 
+    //upload 1 ảnh
     @PostMapping("/upload")
     public ResponseEntity<TaskImageResponse> upload(
             @RequestParam Long taskId,
@@ -28,6 +29,7 @@ public class TaskImageController {
         );
     }
 
+    //upload nhiều ảnh
     @PostMapping("/upload-multiple")
     public ResponseEntity<List<TaskImageResponse>> uploadMultiple(
             @RequestParam Long taskId,
@@ -38,6 +40,7 @@ public class TaskImageController {
         );
     }
 
+    //lấy ảnh của task cụ thể
     @GetMapping("/task/{taskId}")
     public ResponseEntity<List<TaskImageResponse>> getByTask(
             @PathVariable Long taskId
@@ -45,7 +48,7 @@ public class TaskImageController {
         return ResponseEntity.ok(taskImageService.getByTask(taskId));
     }
 
-
+    //update 1 ảnh
     @PutMapping("/{id}/image")
     public ResponseEntity<TaskImageResponse> updateImage(
             @PathVariable Long id,
@@ -56,6 +59,7 @@ public class TaskImageController {
         );
     }
 
+    //update full ảnh trong task
     @PutMapping("/task/{taskId}/replace-all")
     public ResponseEntity<List<TaskImageResponse>> replaceAll(
             @PathVariable Long taskId,
@@ -66,6 +70,7 @@ public class TaskImageController {
         );
     }
 
+    //update index của ảnh
     @PutMapping("/{id}/index")
     public ResponseEntity<TaskImageResponse> updateIndex(
             @PathVariable Long id,

@@ -27,6 +27,11 @@ public class ChatMessageRead {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "read_at")
-    private LocalDateTime readAt = LocalDateTime.now();
+    @Column(name = "read_at", nullable = false)
+    private LocalDateTime readAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.readAt = LocalDateTime.now();
+    }
 }

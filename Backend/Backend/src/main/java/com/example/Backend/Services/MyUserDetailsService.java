@@ -3,6 +3,7 @@ package com.example.Backend.Services;
 import com.example.Backend.Entity.User;
 import com.example.Backend.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,10 +27,17 @@ public class MyUserDetailsService implements UserDetailsService {
                 : userRepository.findByPhoneNumber(input)
                 .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy SĐT"));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .authorities(List.of()) // role lấy từ JWT
-                .build();
+        List<SimpleGrantedAuthority> authorities =
+                user.getUserRoles().stream()
+                        .map(ur -> new SimpleGrantedAuthority(
+                                "ROLE_" + ur.getRole().getRoleName()
+                        ))
+                        .toList();
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
     }
 }

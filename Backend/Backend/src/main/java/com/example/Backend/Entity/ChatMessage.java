@@ -1,5 +1,6 @@
 package com.example.Backend.Entity;
 
+import com.example.Backend.Enum.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,13 +31,22 @@ public class ChatMessage {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name = "message_type", length = 20)
-    private String messageType = "TEXT";
-    // TEXT | IMAGE | SYSTEM
+    @Enumerated(EnumType.STRING)
+    @Column(name = "message_type", length = 20, nullable = false)
+    private MessageType messageType;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.messageType == null) {
+            this.messageType = MessageType.TEXT;
+        }
+        this.createdAt = LocalDateTime.now();
+    }
 }
+

@@ -43,12 +43,23 @@ public class TaskService {
     public TaskResponse update(Long id, TaskRequest request) {
         Task task = getTask(id);
 
-        task.setTitle(request.getTitle());
-        task.setObjective(request.getObjective());
-        task.setDescription(request.getDescription());
-        task.setNotes(request.getNotes());
-        task.setDeadline(request.getDeadline());
-        task.setOrderIndex(request.getOrderIndex());
+        if (request.getTitle() != null)
+            task.setTitle(request.getTitle());
+
+        if (request.getObjective() != null)
+            task.setObjective(request.getObjective());
+
+        if (request.getDescription() != null)
+            task.setDescription(request.getDescription());
+
+        if (request.getNotes() != null)
+            task.setNotes(request.getNotes());
+
+        if (request.getDeadline() != null)
+            task.setDeadline(request.getDeadline());
+
+        if (request.getOrderIndex() != null)
+            task.setOrderIndex(request.getOrderIndex());
 
         if (request.getCategoryId() != null)
             task.setCategory(getCategory(request.getCategoryId()));

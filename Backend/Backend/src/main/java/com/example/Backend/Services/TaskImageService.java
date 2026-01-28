@@ -58,6 +58,7 @@ public class TaskImageService {
             List<MultipartFile> files
     ) throws IOException {
 
+        System.out.println("FILES SIZE = " + files.size());
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
@@ -99,7 +100,6 @@ public class TaskImageService {
         TaskImage image = taskImageRepository.findById(taskImageId)
                 .orElseThrow(() -> new RuntimeException("TaskImage not found"));
 
-        // ❌ Xoá ảnh cũ trên Cloudinary (nếu có)
         if (image.getPublicId() != null) {
             cloudinary.uploader().destroy(image.getPublicId(), ObjectUtils.emptyMap());
         }
