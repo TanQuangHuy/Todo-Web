@@ -9,6 +9,7 @@ import com.example.Backend.Repository.ChatMessageRepository;
 import com.example.Backend.Repository.ChatRoomRepository;
 import com.example.Backend.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,10 @@ public class ChatMessageService {
     private final ChatMessageRepository messageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public ChatMessageResponse sendMessage(ChatMessageRequest request) {
+
         ChatRoom room = chatRoomRepository.findById(request.getChatRoomId())
                 .orElseThrow(() -> new RuntimeException("Chat room not found"));
 
@@ -34,9 +37,16 @@ public class ChatMessageService {
                 .content(request.getContent())
                 .build();
 
-        return toResponse(
-                messageRepository.save(message)
+        ChatMessage saved = messageRepository.save(message);
+        ChatMessageResponse response = toResponse(saved);
+
+        // 🚀 GỬI REALTIME TỚI ROOM
+        messagingTemplate.convertAndSend(
+                "/topic/chat/" + room.getChatRoomId(),
+                response
         );
+
+        return response;
     }
 
     public List<ChatMessageResponse> getMessages(Long chatRoomId) {

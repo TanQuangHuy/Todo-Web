@@ -4,6 +4,7 @@ import com.example.Backend.DTO.Chat.ChatMessageRequest;
 import com.example.Backend.DTO.Chat.ChatMessageResponse;
 import com.example.Backend.Services.ChatMessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,5 +30,6 @@ public class ChatMessageController {
     public void delete(@PathVariable Long id) {
         messageService.delete(id);
     }
+
 }
 
