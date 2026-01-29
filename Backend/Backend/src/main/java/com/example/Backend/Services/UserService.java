@@ -1,8 +1,10 @@
 package com.example.Backend.Services;
 
+import com.cloudinary.Cloudinary;
 import com.example.Backend.DTO.Login.GoogleLoginRequest;
 import com.example.Backend.DTO.Login.LoginResponse;
 import com.example.Backend.DTO.Register.RegisterRequest;
+import com.example.Backend.DTO.User.UpdateUserDTO;
 import com.example.Backend.DTO.User.UserResponse;
 import com.example.Backend.Entity.Role;
 import com.example.Backend.Entity.User;
@@ -19,9 +21,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +50,9 @@ public class UserService {
 
     @Autowired
     private GoogleAuthService googleAuthService;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     public boolean existsByPhoneNumber(String sdt) {
         return userRepository.existsByPhoneNumber(sdt);
@@ -189,6 +196,94 @@ public class UserService {
         res.setToken(jwt);
 
         return res;
+    }
+
+    @Transactional
+    public User updateUser(Long id, UpdateUserDTO dto, MultipartFile avatar) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+        // ===== PHONE =====
+        if (dto.getPhoneNumber() != null && !dto.getPhoneNumber().isBlank()) {
+            if (!dto.getPhoneNumber().equals(user.getPhoneNumber()) &&
+                    userRepository.existsByPhoneNumber(dto.getPhoneNumber())) {
+                throw new RuntimeException("SĐT đã được sử dụng");
+            }
+            user.setPhoneNumber(dto.getPhoneNumber());
+        }
+
+        // ===== USERNAME =====
+        if (dto.getUserName() != null && !dto.getUserName().isBlank()) {
+            if (!dto.getUserName().equals(user.getUserName()) &&
+                    userRepository.existsByUserName(dto.getUserName())) {
+                throw new RuntimeException("Username đã tồn tại");
+            }
+            user.setUserName(dto.getUserName());
+        }
+
+        // ===== EMAIL =====
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
+            if (!dto.getEmail().equals(user.getEmail()) &&
+                    userRepository.existsByEmail(dto.getEmail())) {
+                throw new RuntimeException("Email đã tồn tại");
+            }
+            user.setEmail(dto.getEmail());
+        }
+
+        // ===== ADDRESS =====
+        if (dto.getAddress() != null && !dto.getAddress().isBlank()) {
+            user.setAddress(dto.getAddress());
+        }
+
+        // ===== CHANGE PASSWORD =====
+        if (dto.getNewPassword() != null && !dto.getNewPassword().isBlank()) {
+
+            if (user.getGoogleId() != null) {
+                throw new RuntimeException("Tài khoản Google không thể đổi mật khẩu");
+            }
+
+            if (dto.getOldPassword() == null || dto.getOldPassword().isBlank()) {
+                throw new RuntimeException("Vui lòng nhập mật khẩu hiện tại");
+            }
+
+            if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+                throw new RuntimeException("Mật khẩu hiện tại không đúng");
+            }
+
+            user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        }
+
+        // ===== AVATAR UPLOAD CLOUDINARY =====
+        if (avatar != null && !avatar.isEmpty()) {
+            try {
+                Map uploadResult = cloudinary.uploader().upload(
+                        avatar.getBytes(),
+                        Map.of(
+                                "folder", "avatars",
+                                "resource_type", "image"
+                        )
+                );
+
+                String avatarUrl = uploadResult.get("secure_url").toString();
+                user.setAvatar(avatarUrl);
+
+            } catch (Exception e) {
+                throw new RuntimeException("Upload avatar thất bại: " + e.getMessage());
+            }
+        }
+
+        return userRepository.save(user);
+    }
+
+    public UpdateUserDTO toResponse(User user) {
+        UpdateUserDTO dto = new UpdateUserDTO();
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setUserName(user.getUserName());
+        dto.setEmail(user.getEmail());
+        dto.setAddress(user.getAddress());
+        dto.setAvatar(user.getAvatar());
+        return dto;
     }
 
 }

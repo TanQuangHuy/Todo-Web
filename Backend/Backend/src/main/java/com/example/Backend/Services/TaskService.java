@@ -19,6 +19,8 @@ public class TaskService {
     private final CategoryRepository categoryRepository;
     private final StatusRepository statusRepository;
     private final PriorityRepository priorityRepository;
+    private final NotificationRepository notificationRepository;
+
 
     /* ================= CREATE ================= */
     public TaskResponse create(TaskRequest request) {
@@ -55,8 +57,15 @@ public class TaskService {
         if (request.getNotes() != null)
             task.setNotes(request.getNotes());
 
-        if (request.getDeadline() != null)
+        if (request.getDeadline() != null) {
+
+            if (task.getDeadline() == null || !task.getDeadline().equals(request.getDeadline())) {
+                task.setRemindedDeadline(false);
+                task.setRemindedOverdue(false);
+            }
+
             task.setDeadline(request.getDeadline());
+        }
 
         if (request.getOrderIndex() != null)
             task.setOrderIndex(request.getOrderIndex());
@@ -77,7 +86,19 @@ public class TaskService {
     public TaskResponse markCompleted(Long id) {
         Task task = getTask(id);
         task.setCompletedAt(LocalDateTime.now());
-        return mapToResponse(taskRepository.save(task));
+        Task savedTask = taskRepository.save(task);
+
+        // 🔔 TẠO NOTIFICATION
+        Notification notification = Notification.builder()
+                .title("Task đã hoàn thành")
+                .content("Bạn đã hoàn thành task: " + task.getTitle())
+                .task(task)
+                .user(task.getUser())
+                .build();
+
+        notificationRepository.save(notification);
+
+        return mapToResponse(savedTask);
     }
 
     /* ================= DELETE ================= */

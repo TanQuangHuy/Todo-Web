@@ -85,6 +85,12 @@ public class Task {
     @JoinColumn(name = "priority_id")
     private Priority priority;
 
+    @Column(name = "reminded_deadline")
+    private Boolean remindedDeadline = false;
+
+    @Column(name = "reminded_overdue")
+    private Boolean remindedOverdue = false;
+
     // ========================
     // AUTO TIMESTAMP
     // ========================
