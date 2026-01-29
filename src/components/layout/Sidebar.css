@@ -1,0 +1,100 @@
+/* ===== SIDEBAR ROOT ===== */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #ff6b6b 0%, #ff7d7d 100%);
+  color: #ffffff;
+}
+
+/* ===== PROFILE ===== */
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.18);
+  margin-bottom: 26px;
+}
+
+.sidebar-name {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.sidebar-email {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* ===== NAV ===== */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+/* NavLink base */
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+/* icon */
+.sidebar-nav a svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* hover */
+.sidebar-nav a:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* active (NavLink tự set aria-current="page") */
+.sidebar-nav a[aria-current="page"] {
+  background: #ffffff;
+  color: #ff6b6b;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+/* active icon color */
+.sidebar-nav a[aria-current="page"] svg {
+  color: #ff6b6b;
+}
+
+/* ===== LOGOUT ===== */
+.sidebar-logout {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 16px;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-logout:hover {
+  background: #ffffff;
+  color: #ff6b6b;
+}

@@ -1,0 +1,15 @@
+/* đảo layout cho Register */
+.authContainer.reverse {
+  flex-direction: row-reverse;
+}
+
+/* Register button */
+.authLeft button {
+  margin-top: 6px;
+}
+
+/* Sign up spacing */
+.authLeft .switch {
+  margin-top: 14px;
+  font-size: 13px;
+}

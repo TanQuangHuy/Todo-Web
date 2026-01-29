@@ -1,0 +1,122 @@
+.account-card {
+  background: #f7faff;
+  border: 1px solid #d9dee7;
+  border-radius: 12px;
+  padding: 20px 24px 28px;
+  max-width: 760px;
+
+  margin: 0 auto; 
+}
+
+
+/* HEADER */
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.account-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 6px;
+}
+
+.account-header h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 3px;
+  background: #ff6b35;
+  border-radius: 2px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* USER */
+.account-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.account-user img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.account-user h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.account-user p {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+}
+
+/* FORM */
+.account-form {
+  border: 1px solid #d9dee7;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #cfd6e4;
+}
+
+/* ACTIONS */
+.account-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-primary {
+  background: #ff6b35;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-outline {
+  background: #fff;
+  border: 1px solid #ff6b35;
+  color: #ff6b35;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}

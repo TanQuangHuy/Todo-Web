@@ -1,0 +1,87 @@
+.pageGrid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+}
+
+/* ===== TASK LIST ===== */
+.listCard {
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.listTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.listItems {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.listItem {
+  display: grid;
+  grid-template-columns: 8px 1fr 70px;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #f9fafb;
+  cursor: pointer;
+  align-items: center;
+}
+
+.listItem:hover {
+  background: #f3f4f6;
+}
+
+.listItem.active {
+  background: #fff;
+  outline: 2px solid rgba(255, 107, 107, 0.35);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+}
+
+.liTitle {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.liMeta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.liImg {
+  width: 70px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* ===== DETAIL PANEL ===== */
+.detailCard {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  min-height: 300px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.detailCard.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 16px;
+}
