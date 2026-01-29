@@ -1,14 +1,29 @@
-// src/api/axiosClient.ts
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "https://fake-api.todo.app",
-  timeout: 1000,
+    baseURL: "http://localhost:9090",
 });
 
-axiosClient.interceptors.response.use(
-  (res) => res.data,
-  (err) => Promise.reject(err)
-);
+axiosClient.interceptors.request.use((config) => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // Không ép Content-Type khi gửi FormData
+    if (config.data instanceof FormData) {
+        // Xóa Content-Type để browser tự set boundary đúng
+        delete config.headers['Content-Type'];
+        // Hoặc: config.headers['Content-Type'] = undefined;
+    } else {
+        // Chỉ set json cho các request thông thường (POST/PUT json)
+        config.headers['Content-Type'] = 'application/json';
+
+    }
+
+    return config;
+});
+
 
 export default axiosClient;

@@ -1,17 +1,20 @@
-export type User = {
-  id: string;
-  fullName: string;
+export interface User {
+  userId: number;
+  phoneNumber: string;
+  userName: string;
   email: string;
-  avatarUrl: string;
-};
+  address: string;
+  avatar?: string;
+  role: number;
+}
 
-export type LoginPayload = { username: string; password: string };
-export type RegisterPayload = {
-  firstName: string;
-  lastName: string;
-  username: string;
+export interface LoginResponse {
+  token: string;
+  userId: number;
+  phoneNumber: string;
+  userName: string;
   email: string;
-  password: string;
-  confirmPassword: string;
-  agree: boolean;
-};
+  address: string;
+  avatar: string;
+  role: number;
+}

@@ -1,31 +1,46 @@
-import type { LoginPayload, RegisterPayload, User } from "../types/auth";
-import { fakeUser } from "../data/fakeDb";
-import { sleep } from "../utils/sleep";
+import axiosClient from "../api/axiosClient";
+import type { LoginResponse, User } from "../types/auth";
+
+const api = axiosClient;
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const authService = {
-  async login(payload: LoginPayload): Promise<{ token: string; user: User }> {
-    await sleep(450);
-    if (!payload.username || !payload.password) {
-      throw new Error("Missing credentials");
-    }
-    return { token: "fake_jwt_token", user: fakeUser };
+  // login
+  login: async (payload: {
+    phoneNumber?: string;
+    email?: string;
+    password: string;
+  }): Promise<LoginResponse> => {
+    const res = await api.post("/api/user/login", payload);
+    return res.data;
   },
 
-  async register(payload: RegisterPayload): Promise<{ token: string; user: User }> {
-    await sleep(650);
-    if (!payload.agree) throw new Error("You must agree to terms");
-    if (payload.password !== payload.confirmPassword)
-      throw new Error("Password mismatch");
-    return { token: "fake_jwt_token", user: fakeUser };
+  // register (BE KHÔNG trả token)
+  register: async (payload: {
+    phoneNumber: string;
+    userName: string;
+    email: string;
+    password: string;
+    address: string;
+  }): Promise<void> => {
+    await api.post("/api/user/register", payload);
   },
 
-  async me(): Promise<User | null> {
-    await sleep(250);
-    const token = localStorage.getItem("token");
-    return token ? fakeUser : null;
+  // lấy user hiện tại
+  me: async (): Promise<User> => {
+    const res = await api.get("/me");
+    return res.data;
   },
 
-  async logout(): Promise<void> {
-    await sleep(150);
+  // logout (nếu BE có endpoint)
+  logout: async (): Promise<void> => {
+    await api.post("/logout");
   },
 };

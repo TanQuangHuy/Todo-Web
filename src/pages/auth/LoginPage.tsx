@@ -14,7 +14,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [input, setInput] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,11 +23,15 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
+
     try {
-      await login(username, password);
-      navigate("/tasks");
+      // 🔐 login (email hoặc phone đều được)
+      await login(input, password);
+
+      // 🚀 REDIRECT NGAY LẬP TỨC
+      navigate("/tasks", { replace: true });
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      setError(err?.response?.data?.message || "Sai thông tin đăng nhập");
     } finally {
       setLoading(false);
     }
@@ -46,9 +50,10 @@ export default function LoginPage() {
             <div className="inputGroup">
               <FaUser className="inputIcon" />
               <input
-                placeholder="Enter Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Email hoặc số điện thoại"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                required
               />
             </div>
 
@@ -56,9 +61,10 @@ export default function LoginPage() {
               <FaLock className="inputIcon" />
               <input
                 type="password"
-                placeholder="Enter Password"
+                placeholder="Mật khẩu"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
 
@@ -67,7 +73,7 @@ export default function LoginPage() {
               Remember Me
             </label>
 
-            <button disabled={loading}>
+            <button type="submit" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </button>
           </form>
