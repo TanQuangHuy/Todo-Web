@@ -1,5 +1,6 @@
 package com.example.Backend.Services;
 
+import com.example.Backend.DTO.Login.GoogleLoginRequest;
 import com.example.Backend.DTO.Login.LoginResponse;
 import com.example.Backend.DTO.Register.RegisterRequest;
 import com.example.Backend.DTO.User.UserResponse;
@@ -13,6 +14,7 @@ import com.example.Backend.Repository.UserRepository;
 import com.example.Backend.Repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,9 @@ public class UserService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private GoogleAuthService googleAuthService;
 
     public boolean existsByPhoneNumber(String sdt) {
         return userRepository.existsByPhoneNumber(sdt);
@@ -132,6 +137,58 @@ public class UserService {
                 .role(roleId)
                 .token(jwtUtil.generateToken(input, roles))
                 .build();
+    }
+
+    @Transactional
+    public LoginResponse loginWithGoogle(GoogleLoginRequest req) {
+
+        var payload = googleAuthService.verify(req.getIdToken());
+
+        String email = payload.getEmail();
+        String userName = (String) payload.get("name");
+        String avatar = (String) payload.get("picture");
+        String googleId = payload.getSubject();
+
+        User user = userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setEmail(email);
+                    newUser.setUserName(userName);
+                    newUser.setAvatar(avatar);
+                    newUser.setGoogleId(googleId);
+
+                    User savedUser = userRepository.save(newUser);
+
+                    Role roleUser = roleRepository.findByRoleName("USER")
+                            .orElseThrow(() -> new RuntimeException("Role USER không tồn tại"));
+
+                    UserRole userRole = UserRole.builder()
+                            .id(new UserRoleId(savedUser.getUserId(), roleUser.getRoleId()))
+                            .user(savedUser)
+                            .role(roleUser)
+                            .build();
+
+                    userRoleRepository.save(userRole);
+
+                    return savedUser;
+                });
+
+        List<String> roles = userRoleRepository
+                .findFirstByUser_UserId(user.getUserId())
+                .stream()
+                .map(ur -> "ROLE_" + ur.getRole().getRoleName())
+                .toList();
+
+        String jwt = jwtUtil.generateToken(user.getEmail(), roles);
+
+        LoginResponse res = new LoginResponse();
+        res.setUserId(user.getUserId());
+        res.setEmail(user.getEmail());
+        res.setUserName(user.getUserName());
+        res.setAvatar(user.getAvatar());
+        res.setToken(jwt);
+
+        return res;
     }
 
 }

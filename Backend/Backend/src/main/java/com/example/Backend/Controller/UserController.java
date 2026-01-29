@@ -1,5 +1,6 @@
 package com.example.Backend.Controller;
 
+import com.example.Backend.DTO.Login.GoogleLoginRequest;
 import com.example.Backend.DTO.Login.LoginRequest;
 import com.example.Backend.DTO.Login.LoginResponse;
 import com.example.Backend.DTO.Register.RegisterRequest;
@@ -68,4 +69,17 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/login/google")
+    public ResponseEntity<?> loginWithGoogle(@RequestBody GoogleLoginRequest request) {
+        try {
+            LoginResponse response = userService.loginWithGoogle(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Google login thất bại: " + e.getMessage());
+        }
+    }
+
 }

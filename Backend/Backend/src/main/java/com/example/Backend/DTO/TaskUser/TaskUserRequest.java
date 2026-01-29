@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class TaskUserRequest {
     private Long taskId;
-    private Long userId;
+    private String email;
     private String role; // có thể null
 }

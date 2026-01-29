@@ -22,22 +22,22 @@ public class TaskUserService {
     /* ============ CREATE / ASSIGN ============ */
     public TaskUserResponse assign(TaskUserRequest request) {
 
-        if (taskUserRepository.existsByTask_TaskIdAndUser_UserId(
-                request.getTaskId(), request.getUserId())) {
-            throw new RuntimeException("User đã được gán vào task");
-        }
-
         Task task = taskRepository.findById(request.getTaskId())
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + request.getEmail()));
+
+        if (taskUserRepository.existsByTask_TaskIdAndUser_UserId(
+                task.getTaskId(), user.getUserId())) {
+            throw new RuntimeException("User đã được gán vào task");
+        }
 
         TaskUser taskUser = TaskUser.builder()
-                .id(new TaskUserId(task.getTaskId(), user.getUserId()))
+                .id(new TaskUserId(task.getTaskId(), user.getUserId())) // vẫn lưu ID như cũ
                 .task(task)
                 .user(user)
-                .role(request.getRole()) // có thể null
+                .role(request.getRole())
                 .build();
 
         return mapToResponse(taskUserRepository.save(taskUser));
