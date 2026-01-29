@@ -31,9 +31,9 @@ export default function Sidebar() {
     <aside className="sidebar">
       {/* PROFILE */}
       <div className="sidebar-profile">
-        {user && <Avatar src={user.avatarUrl} size={56} />}
+        {user && <Avatar src={user.avatar ?? "/default-avatar.png"} size={56} />}
         <div>
-          <div className="sidebar-name">{user?.fullName}</div>
+          <div className="sidebar-name">{user?.userName}</div>
           <div className="sidebar-email">{user?.email}</div>
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function Sidebar() {
           My Task
         </NavLink>
 
-        <NavLink to="/app/dashboard" style={navItem}>
+        <NavLink to="/task-categories" style={navItem}>
           <FolderKanban size={18} />
           Task Categories
         </NavLink>

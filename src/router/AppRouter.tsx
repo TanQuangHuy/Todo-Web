@@ -8,6 +8,12 @@ import AppLayout from "../components/layout/AppLayout";
 import AccountInfoPage from "../pages/setting/AccountInfoPage";
 import ChangePasswordPage from "../pages/setting/ChangePasswordPage";
 
+import TaskCategoryPage from "../pages/taskCategory/TaskCategoryPage";
+
+import CreateCategoryPage from "../pages/taskCategory/CreateCategoryPage";
+import CreatePriorityPage from "../pages/taskCategory/CreatePriorityPage";
+import CreateStatusPage from "../pages/taskCategory/CreateStatusPage";
+
 import RegisterPage from "../pages/auth/RegisterPage";
 
 export default function AppRouter() {
@@ -23,6 +29,16 @@ export default function AppRouter() {
         }
       >
         {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+        <Route path="/task-categories/create-category" element={<CreateCategoryPage />} />
+        <Route path="/task-categories/edit-category/:id" element={<CreateCategoryPage />} />
+        
+        <Route path="/task-categories/create-priority" element={<CreatePriorityPage />} />
+        <Route path="/task-categories/edit-priority/:id" element={<CreatePriorityPage />} />
+
+        <Route path="/task-categories/create-status" element={<CreateStatusPage />} />
+        <Route path="/task-categories/edit-status/:id" element={<CreateStatusPage />} />
+
+        <Route path="/task-categories" element={<TaskCategoryPage />} />
         <Route path="/tasks" element={<MyTaskPage />} />
         <Route path="/settings/account" element={<AccountInfoPage />} />
         <Route path="/settings/change-password" element={<ChangePasswordPage />} />
