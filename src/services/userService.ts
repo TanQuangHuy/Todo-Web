@@ -1,6 +1,5 @@
 import axiosClient from "../api/axiosClient";
 
-
 export interface LoginResponse {
   userId: number;
   phoneNumber: string;
@@ -12,15 +11,27 @@ export interface LoginResponse {
   token: string;
 }
 
-const userService = {
+const authService = {
   login: async (input: string, password: string): Promise<LoginResponse> => {
-    const res = await axiosClient.post(`${axiosClient.defaults.baseURL}/login`, {
-      input,
+    const isEmail = input.includes("@");
+
+    const res = await axiosClient.post("/login", {
+      email: isEmail ? input : null,
+      phoneNumber: !isEmail ? input : null,
       password,
     });
 
     return res.data;
   },
+
+  me: async () => {
+    const res = await axiosClient.get("/me");
+    return res.data;
+  },
+
+  logout: async () => {
+    return axiosClient.post("/logout");
+  },
 };
 
-export default userService;
+export default authService;

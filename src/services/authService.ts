@@ -1,24 +1,26 @@
 import axiosClient from "../api/axiosClient";
-import type { LoginResponse, User } from "../types/auth";
 
-const api = axiosClient;
+export interface LoginResponse {
+  userId: number;
+  phoneNumber: string;
+  userName: string;
+  email: string;
+  address: string;
+  avatar?: string;
+  role: number;
+  token: string;
+}
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+const authService = {
+  login: async (input: string, password: string): Promise<LoginResponse> => {
+    const isEmail = input.includes("@");
 
-export const authService = {
-  // login
-  login: async (payload: {
-    phoneNumber?: string;
-    email?: string;
-    password: string;
-  }): Promise<LoginResponse> => {
-    const res = await api.post("/api/user/login", payload);
+    const res = await axiosClient.post("/api/user/login", {
+      email: isEmail ? input : null,
+      phoneNumber: !isEmail ? input : null,
+      password,
+    });
+
     return res.data;
   },
 
@@ -30,17 +32,12 @@ export const authService = {
     password: string;
     address: string;
   }): Promise<void> => {
-    await api.post("/api/user/register", payload);
+    await axiosClient.post("/api/user/register", payload);
   },
 
-  // lấy user hiện tại
-  me: async (): Promise<User> => {
-    const res = await api.get("/me");
-    return res.data;
-  },
-
-  // logout (nếu BE có endpoint)
-  logout: async (): Promise<void> => {
-    await api.post("/logout");
+  logout: async () => {
+    return axiosClient.post("/logout");
   },
 };
+
+export default authService;

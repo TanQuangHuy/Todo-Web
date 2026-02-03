@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/auth/LoginPage";
 // import DashboardPage from "../pages/app/DashboardPage";
-import MyTaskPage from "../pages/app/MyTaskPage";
+import MyTaskPage from "../pages/task/MyTaskPage";
 import RequireAuth from "./RequireAuth";
 import AppLayout from "../components/layout/AppLayout";
 

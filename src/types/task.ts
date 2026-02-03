@@ -1,28 +1,22 @@
 export type Priority = "Extreme" | "Moderate" | "Low";
 export type TaskStatus = "Not Started" | "In Progress" | "Completed";
 
-export type Task = {
-  id: string;
+export interface Task {
+  taskId: number;
   title: string;
-
-  /** yyyy-MM-dd */
-  dateISO: string;
-
-  priority: Priority;
-  status: TaskStatus;
-
+  objective: string;
   description: string;
-  imageUrl?: string;
+  notes: string | null;
+  deadline: string | null;
+  completedAt: string | null;
+  orderIndex: number;
 
-  /** yyyy-MM-dd */
-  createdAtISO: string;
+  userId: number;
+  categoryId: number;
+  statusId: number;
+  priorityId: number;
 
-  assignees?: {
-    id: string;
-    name: string;
-    avatarUrl: string;
-  }[];
+  createdAt: string;
+  updatedAt: string;
+}
 
-  notes?: string[];
-  deadline: string;
-};

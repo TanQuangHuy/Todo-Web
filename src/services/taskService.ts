@@ -1,42 +1,45 @@
-// src/services/taskService.ts
-import type { Task, TaskStatus } from "../types/task";
-import { fakeTasks } from "../data/fakeDb";
-import { sleep } from "../utils/sleep";
+import axiosClient from "../api/axiosClient";
+import type { Task } from "../types/task";
 
-let db = [...fakeTasks];
+export type TaskPayload = {
+  title: string;
+  objective: string;
+  description: string;
+  notes?: string | null;
+  deadline?: string | null;
+  completedAt?: string | null;
+
+  userId: number;
+  categoryId: number;
+  statusId: number;
+  priorityId: number;
+  orderIndex: number;
+};
 
 export const taskService = {
-  async getAll(): Promise<Task[]> {
-    await sleep(250);
-    return [...db];
+  async getTasksByUser(userId: number): Promise<Task[]> {
+    const res = await axiosClient.get(`/api/tasks/user/${userId}`);
+    return res.data;
   },
 
-  async getById(id: string): Promise<Task | null> {
-    await sleep(150);
-    return db.find((t) => t.id === id) ?? null;
+  async getById(id: number): Promise<Task> {
+    const res = await axiosClient.get(`/api/tasks/${id}`);
+    return res.data;
   },
 
-  async updateStatus(id: string, status: TaskStatus): Promise<Task | null> {
-    await sleep(200);
-    db = db.map((t) => (t.id === id ? { ...t, status } : t));
-    return db.find((t) => t.id === id) ?? null;
+  async createTask(payload: TaskPayload) {
+    return axiosClient.post(`/api/tasks`, payload).then(res => res.data);
   },
 
-  async remove(id: string): Promise<boolean> {
-    await sleep(200);
-    const before = db.length;
-    db = db.filter((t) => t.id !== id);
-    return db.length !== before;
+  async updateTask(id: number, payload: TaskPayload) {
+    return axiosClient.put(`/api/tasks/${id}`, payload);
   },
 
-  async create(payload: Omit<Task, "id" | "createdAt">): Promise<Task> {
-    await sleep(250);
-    const created: Task = {
-      ...payload,
-      id: "t" + Math.random().toString(16).slice(2),
-      createdAtISO: new Date().toISOString().slice(0, 10),
-    };
-    db = [created, ...db];
-    return created;
+  async completeTask(id: number) {
+    return axiosClient.put(`/api/tasks/${id}/complete`);
+  },
+
+  async deleteTask(id: number) {
+    return axiosClient.delete(`/api/tasks/${id}`);
   },
 };

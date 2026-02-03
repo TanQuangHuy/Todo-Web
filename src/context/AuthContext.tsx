@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { User } from "../types/auth";
-import { authService } from "../services/authService";
+import authService from "../services/authService";
 
 type AuthContextType = {
   user: User | null;
@@ -22,29 +22,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // auto login khi refresh
+  // ✅ restore login từ localStorage
   useEffect(() => {
-    authService
-      .me()
-      .then((u) => setUser(u))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+    const cachedUser = localStorage.getItem("auth_user");
+
+    if (cachedUser) {
+      setUser(JSON.parse(cachedUser));
+    }
+
+    setLoading(false);
   }, []);
 
+  // ✅ LOGIN
   const login = async (input: string, password: string) => {
-    const isEmail = input.includes("@");
-
-    const res = await authService.login({
-      email: isEmail ? input : undefined,
-      phoneNumber: !isEmail ? input : undefined,
-      password,
-    });
+    const res = await authService.login(input, password);
 
     localStorage.setItem("token", res.token);
+    localStorage.setItem("auth_user", JSON.stringify(res));
+
     setUser(res);
   };
 
-  // register
+  // ✅ REGISTER (KHÔNG auto login)
   const register = async (payload: {
     phoneNumber: string;
     userName: string;
@@ -55,12 +54,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await authService.register(payload);
   };
 
-  // logout
+  // ✅ LOGOUT
   const logout = async () => {
     try {
       await authService.logout();
     } finally {
       localStorage.removeItem("token");
+      localStorage.removeItem("auth_user");
       setUser(null);
     }
   };

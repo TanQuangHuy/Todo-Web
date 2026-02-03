@@ -1,121 +1,115 @@
-// src/components/tasks/TaskDetailPanel.tsx
-import type { Task, TaskStatus } from "../../types/task";
+import type { TaskUI } from "../../hooks/useTasks";
 
 type Props = {
-  task: Task | null;
-  onBack?: () => void;
-  onChangeStatus?: (status: TaskStatus) => void;
+  task: TaskUI | null;
+  onEdit: () => void;
+  onCreate: () => void;
   onDelete?: () => void;
-  onEdit?: () => void;
 };
 
-const StatusPill = ({
-  status,
-  onChange,
-}: {
-  status: TaskStatus;
-  onChange?: (s: TaskStatus) => void;
-}) => {
-  return (
-    <div className="statusRow">
-      <span className={`pill status ${status.replaceAll(" ", "")}`}>
-        {status}
-      </span>
-
-      {onChange && (
-        <select
-          className="statusSelect"
-          value={status}
-          onChange={(e) => onChange(e.target.value as TaskStatus)}
-        >
-          <option value="Not Started">Not Started</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-      )}
-    </div>
-  );
-};
+const formatDate = (d?: string) =>
+  d ? new Date(d).toLocaleDateString("vi-VN") : "-";
 
 export default function TaskDetailPanel({
   task,
-  onBack,
-  onChangeStatus,
-  onDelete,
   onEdit,
+  onCreate,
+  onDelete,
 }: Props) {
+ 
   if (!task) {
     return (
       <div className="detailCard empty">
-        <div className="muted">Chọn 1 task ở danh sách để xem chi tiết.</div>
+        <p>Select a task to see details</p>
+
+        <button className="actionBtn primary" onClick={onCreate}>
+          + Add New Task
+        </button>
       </div>
     );
   }
 
   return (
     <div className="detailCard">
+      {/* HEADER */}
       <div className="detailHeader">
-        <div className="detailTitleWrap">
-          <h3 className="detailTitle">{task.title}</h3>
-          <button className="linkBtn" onClick={onBack}>
-            Go Back
-          </button>
-        </div>
+        <img
+          className="detailThumb"
+          src={task.imageUrl || "https://via.placeholder.com/120"}
+          alt=""
+        />
 
-        <div className="metaRow">
-          <div>
-            <div className="metaLabel">Priority:</div>
-            <div className={`pill priority ${task.priority}`}>
-              {task.priority}
-            </div>
-          </div>
+        <div className="detailHeaderInfo">
+          <h2>{task.title}</h2>
 
-          <div>
-            <div className="metaLabel">Status:</div>
-            <StatusPill status={task.status} onChange={onChangeStatus} />
-          </div>
+          <div className="detailMetaLine">
+            <span>
+              Priority:{" "}
+              <b className={`text ${task.priority?.priorityName?.toLowerCase()}`}>
+                {task.priority?.priorityName}
+              </b>
+            </span>
 
-          <div>
-            <div className="metaLabel">Created:</div>
-            <div className="metaValue">{task.createdAtISO}</div>
-          </div>
+            <span>
+              Status:{" "}
+              <b className={`text ${task.status?.statusName?.toLowerCase()}`}>
+                {task.status?.statusName}
+              </b>
+            </span>
 
-          <div>
-            <div className="metaLabel">Deadline:</div>
-            <div className="metaValue">{task.deadline}</div>
+            <span className="created">
+              Created on: {formatDate(task.createdAt)}
+            </span>
           </div>
         </div>
       </div>
 
+      {/* BODY */}
       <div className="detailBody">
-        <div className="detailTop">
-          <img
-            className="detailImage"
-            src={task.imageUrl || "https://via.placeholder.com/300x200?text=No+Image"}
-            alt={task.title}
-          />
-          <p className="detailDesc">{task.description}</p>
-        </div>
+        <p>
+          <b>Task Title:</b> {task.title}
+        </p>
 
-        <div className="notesBlock">
-          <h4>Additional Notes:</h4>
-          <ul>
-            <li>Ensure the documents are authentic and up-to-date.</li>
-            <li>Maintain confidentiality of sensitive information.</li>
-            <li>If there are specific guidelines, adhere diligently.</li>
-          </ul>
-          <div className="deadlineLine">
-            <b>Deadline for Submission:</b> {task.deadline}
-          </div>
-        </div>
+        <p>
+          <b>Objective:</b> {task.objective}
+        </p>
+
+        <p>
+          <b>Task Description:</b>
+        </p>
+        <p className="muted">{task.description}</p>
+
+        {task.notes && (
+          <>
+            <p>
+              <b>Additional Notes:</b>
+            </p>
+            <p className="muted">{task.notes}</p>
+          </>
+        )}
+
+        {task.deadline && (
+          <p>
+            <b>Deadline for Submission:</b>{" "}
+            {formatDate(task.deadline)}
+          </p>
+        )}
       </div>
 
+      {/* ACTION BUTTONS */}
       <div className="detailActions">
-        <button className="iconBtn danger" onClick={onDelete} title="Delete">
-          🗑️
+        <button
+          className="actionBtn danger"
+          onClick={onDelete}
+        >
+          Delete
         </button>
-        <button className="iconBtn" onClick={onEdit} title="Edit">
-          ✏️
+
+        <button
+          className="actionBtn primary"
+          onClick={onEdit}
+        >
+          Edit
         </button>
       </div>
     </div>

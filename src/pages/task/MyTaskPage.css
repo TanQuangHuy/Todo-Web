@@ -1,0 +1,159 @@
+/* ===== LAYOUT ===== */
+.taskLayout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 20px;
+}
+
+/* ===== LEFT PANEL ===== */
+.listCard {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.listTitle {
+  margin-bottom: 14px;
+}
+
+.taskItem {
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.taskItem.active {
+  border-color: #3b82f6;
+}
+
+.taskContent {
+  flex: 1;
+}
+
+.taskHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.taskDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #ef4444;
+}
+
+.taskTitle {
+  font-size: 14px;
+}
+
+.taskDesc {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 6px 0;
+}
+
+.taskMetaLine {
+  font-size: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.created {
+  color: #9ca3af;
+}
+
+.taskThumb {
+  width: 80px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* ===== RIGHT PANEL ===== */
+.detailCard {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 20px;
+  position: relative;
+}
+
+.detailCard.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+}
+
+.detailHeader {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.detailThumb {
+  width: 120px;
+  height: 90px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.detailMetaLine {
+  font-size: 13px;
+  display: flex;
+  gap: 14px;
+}
+
+.detailBody {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.detailActions {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.actionBtn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actionBtn.primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.actionBtn.danger {
+  background: #ef4444;
+  color: white;
+}
+
+/* ===== TEXT COLORS ===== */
+.text.urgent,
+.text.extreme,
+.text.not\ started {
+  color: #ef4444;
+}
+
+.text.in\ progress,
+.text.moderate,
+.text.active {
+  color: #2563eb;
+}

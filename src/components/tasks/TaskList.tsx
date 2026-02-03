@@ -1,45 +1,56 @@
-// src/components/tasks/TaskList.tsx
-import type { Task } from "../../types/task";
+import type { TaskUI } from "../../hooks/useTasks";
 
 type Props = {
-  tasks: Task[];
-  activeId?: string | null;
-  onSelect: (id: string) => void;
+  tasks: TaskUI[];
+  activeId: number | null;
+  onSelect: (id: number) => void;
 };
+
+const formatDate = (date?: string) =>
+  date ? new Date(date).toLocaleDateString("vi-VN") : "-";
 
 export default function TaskList({ tasks, activeId, onSelect }: Props) {
   return (
     <div className="listCard">
-      <div className="listTitle">My Tasks</div>
+      <h3 className="listTitle">My Tasks</h3>
 
-      <div className="listItems">
-        {tasks.map((t) => (
-          <button
-            key={t.id}
-            className={`listItem ${activeId === t.id ? "active" : ""}`}
-            onClick={() => onSelect(t.id)}
-          >
-            <div className="dot" />
-            <div className="liMain">
-              <div className="liTitle">{t.title}</div>
-              <div className="liMeta">
-                <span className={`pill priority ${t.priority}`}>
-                  {t.priority}
-                </span>
-                <span className={`pill status ${t.status.replaceAll(" ", "")}`}>
-                  {t.status}
-                </span>
-              </div>
+      {tasks.map((t) => (
+        <div
+          key={t.taskId}
+          className={`taskItem ${activeId === t.taskId ? "active" : ""}`}
+          onClick={() => onSelect(t.taskId)}
+        >
+          {/* LEFT CONTENT */}
+          <div className="taskContent">
+            <div className="taskHeader">
+              <span className="taskDot" />
+              <b className="taskTitle">{t.title}</b>
             </div>
 
-            <img
-              className="liImg"
-              src={t.imageUrl || "https://via.placeholder.com/60?text=No"}
-              alt=""
-            />
-          </button>
-        ))}
-      </div>
+            {t.description && (
+              <p className="taskDesc">
+                {t.description.slice(0, 50)}...
+              </p>
+            )}
+
+            {/* META LINE */}
+            <div className="taskMetaLine">
+
+
+              <span className="created">
+                Created on: {formatDate(t.createdAt)}
+              </span>
+            </div>
+          </div>
+
+          {/* RIGHT IMAGE */}
+          <img
+            className="taskThumb"
+            src={t.imageUrl || "https://via.placeholder.com/80"}
+            alt=""
+          />
+        </div>
+      ))}
     </div>
   );
 }
